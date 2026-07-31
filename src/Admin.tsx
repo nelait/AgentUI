@@ -39,6 +39,7 @@ const TYPE_HELP: Record<AgentType, string> = {
   rest: 'Plain HTTP agent: the gateway POSTs { input, systemPrompt, history } and expects { reply }.',
   a2a: 'Agent-to-Agent protocol peer. The gateway validates its agent card and delegates via message/send.',
   mcp: 'MCP server: its tools are discovered at registration, become EMA scopes, and every call is checked.',
+  'mcp-llm': 'MCP + LLM reasoning: Gemini selects tools, maps arguments, and synthesizes natural responses.',
 };
 
 const emptyForm = {
@@ -110,8 +111,8 @@ function AgentsAdmin() {
       });
       setForm(emptyForm);
       setNotice(
-        created.type === 'mcp'
-          ? `Registered ${created.name} — discovered MCP tools: ${created.toolScopes.join(', ')}`
+        created.type === 'mcp' || created.type === 'mcp-llm'
+          ? `Registered ${created.name} — discovered MCP tools: ${created.toolScopes.join(', ')}${created.type === 'mcp-llm' ? ' (LLM-powered)' : ''}`
           : `Registered ${created.name} (${created.type})`
       );
       refresh();
@@ -215,7 +216,7 @@ function AgentsAdmin() {
                   ? 'Endpoint URL (e.g. http://localhost:7101/invoke)'
                   : form.type === 'a2a'
                     ? 'A2A base URL (e.g. http://localhost:7102)'
-                    : 'MCP endpoint (e.g. http://localhost:7103/mcp)'
+                    : 'MCP endpoint (e.g. https://your-server/mcp)'
               }
               value={form.endpoint}
               onChange={(e) => setForm({ ...form, endpoint: e.target.value })}
@@ -265,8 +266,11 @@ function AgentsAdmin() {
             </div>
           </>
         )}
-        {form.type === 'mcp' && (
-          <p className="muted">Tools are discovered from the server at registration and become EMA scopes.</p>
+        {(form.type === 'mcp' || form.type === 'mcp-llm') && (
+          <p className="muted">
+            Tools are discovered from the server at registration and become EMA scopes.
+            {form.type === 'mcp-llm' && ' Gemini LLM will intelligently select tools and synthesize natural answers.'}
+          </p>
         )}
         <div className="scope-picker">
           <span className="muted">Restrict to roles (none = all): </span>

@@ -26,7 +26,7 @@ export interface RoleDef {
   grants: string[];
 }
 
-export type AgentType = 'mock' | 'rest' | 'a2a' | 'mcp';
+export type AgentType = 'mock' | 'rest' | 'a2a' | 'mcp' | 'mcp-llm';
 
 export interface Agent {
   id: string;

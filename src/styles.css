@@ -69,6 +69,7 @@ body { background: var(--bg); color: var(--text); }
 .chip-type-rest { color: #4f8cff; border-color: #4f8cff; }
 .chip-type-a2a { color: #bd7f38; border-color: #bd7f38; }
 .chip-type-mcp { color: #35c98e; border-color: #35c98e; }
+.chip-type-mcp-llm { color: #a855f7; border-color: #a855f7; }
 .chip-on { border-color: var(--accent); color: var(--text); }
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
 
